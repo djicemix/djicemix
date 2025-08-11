@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DJ Ice-Mix - Turning Vibes into Waves</title>
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        :root {
+            --primary: #00f0ff;
+            --secondary: #ff00f0;
+            --dark: #0a0a12;
+            --darker: #050508;
+            --light: #f0f0f0;
+            --transition: all 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Preloader Styles */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .preloader-text {
+            font-size: clamp(2rem, 8vw, 5rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary));
+            background-size: 200% auto;
+            color: #000;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientBG 3s linear infinite, pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 10, 18, 0.8);
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--light);
+        }
+
+        /* Hero Section */
+        #hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+        }
+
+        .hero-content {
+            z-index: 2;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: slideUp 1s ease forwards 0.5s;
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            margin-bottom: 2rem;
+            max-width: 700px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: var(--transition);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+        }
+
+        /* Particle Background */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* Sections Common Styles */
+        section {
+            padding: 6rem 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        /* Services Section */
+        #services {
+            background: var(--darker);
+        }
+
+        .services-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition);
+            transform: translateX(-100px);
+            opacity: 0;
+        }
+
+        .service-card:nth-child(even) {
+            transform: translateX(100px);
+        }
+
+        .service-card.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .service-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 240, 255, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Clients Section */
+        #clients {
+            background: var(--dark);
+        }
+
+        .clients-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .client-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: var(--transition);
+            transform: translateY(50px);
+            opacity: 0;
+        }
+
+        .client-card.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .client-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .client-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        /* Location Section */
+        #location {
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            text-align: center;
+        }
+
+        .location-content {
+            max-width: 600px;
+            margin: 0 auto;
+            transform: scale(0.8);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .location-content.show {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .location-text {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .location-highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Contact Section */
+        #contact {
+            background: var(--darker);
+            text-align: center;
+        }
+
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-method {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: var(--transition);
+            transform: rotateY(90deg);
+        }
+
+        .contact-method.show {
+            transform: rotateY(0);
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .contact-link {
+            color: var(--light);
+            text-decoration: none;
+            transition: var(--transition);
+            display: block;
+        }
+
+        .contact-link:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .shop-button {
+            display: inline-block;
+            margin-top: 3rem;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            color: var(--dark);
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: var(--transition);
+            box-shadow: 0 0 15px rgba(255, 0, 240, 0.3);
+        }
+
+        .shop-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(255, 0, 240, 0.5);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--darker);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Animations */
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: var(--darker);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 2rem;
+                transition: var(--transition);
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .services-container {
+                grid-template-columns: 1fr;
+            }
+
+            .service-card, .service-card:nth-child(even) {
+                transform: translateY(50px);
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="preloader-text">DJ Ice-Mix</div>
+    </div>
+
+    <!-- Navigation -->
+    <header>
+        <a href="#" class="logo">DJ <span>Ice-Mix</span></a>
+        <div class="menu-toggle">☰</div>
+        <nav class="nav-links">
+            <a href="#hero">Home</a>
+            <a href="#services">Services</a>
+            <a href="#clients">Clients</a>
+            <a href="#location">Location</a>
+            <a href="#contact">Contact</a>
+            <a href="#shop">Shop</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div id="particles-js"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">DJ Ice-Mix</h1>
+            <p class="hero-subtitle">Turning Vibes into Waves</p>
+            <a href="#services" class="cta-button">Explore Services</a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services">
+        <h2 class="section-title">Our Services</h2>
+        <div class="services-container">
+            <div class="service-card">
+                <div class="service-icon">🎧</div>
+                <h3 class="service-title">DJ Services</h3>
+                <p>Professional DJing for any event with top-notch equipment.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🎤</div>
+                <h3 class="service-title">MC's</h3>
+                <p>Talented MCs to host and energize your events.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🔊</div>
+                <h3 class="service-title">Sound Setup</h3>
+                <p>Premium sound systems for crystal clear audio.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">💨</div>
+                <h3 class="service-title">Shisha Pots</h3>
+                <p>Luxury shisha setups to elevate your event.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🚗</div>
+                <h3 class="service-title">Automobile Cars</h3>
+                <p>Stylish cars for special occasions.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🔄</div>
+                <h3 class="service-title">Equipment Exchanges</h3>
+                <p>Rent or exchange professional DJ equipment.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📅</div>
+                <h3 class="service-title">Event Planning</h3>
+                <p>Full event planning and coordination services.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Clients Section -->
+    <section id="clients">
+        <h2 class="section-title">Our Clients</h2>
+        <div class="clients-container">
+            <div class="client-card">
+                <div class="client-icon">🌃</div>
+                <h3>Night Clubs</h3>
+                <p>Energizing nightlife with the hottest mixes</p>
+            </div>
+            <div class="client-card">
+                <div class="client-icon">💍</div>
+                <h3>Weddings</h3>
+                <p>Creating unforgettable wedding experiences</p>
+            </div>
+            <div class="client-card">
+                <div class="client-icon">🏠</div>
+                <h3>House Parties</h3>
+                <p>Bringing the club vibe to your home</p>
+            </div>
+            <div class="client-card">
+                <div class="client-icon">🏢</div>
+                <h3>Corporate Events</h3>
+                <p>Professional entertainment for businesses</p>
+            </div>
+            <div class="client-card">
+                <div class="client-icon">🌳</div>
+                <h3>Outdoor Gigs</h3>
+                <p>Powerful sound for open-air events</p>
+            </div>
+            <div class="client-card">
+                <div class="client-icon">🔒</div>
+                <h3>Private Sessions</h3>
+                <p>Exclusive music experiences</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section id="location">
+        <h2 class="section-title">Location</h2>
+        <div class="location-content">
+            <p class="location-text">
+                Based in the vibrant city of <span class="location-highlight">Enugu, Nigeria</span>, 
+                DJ Ice-Mix brings world-class entertainment to your doorstep.
+            </p>
+            <p class="location-text">
+                Available for bookings nationwide and international events.
+            </p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2 class="section-title">Contact Us</h2>
+        <div class="contact-container">
+            <div class="contact-method">
+                <div class="contact-icon">✉️</div>
+                <a href="mailto:djIce-Mix.ng@gmail.com" class="contact-link">djIce-Mix.ng@gmail.com</a>
+            </div>
+            <div class="contact-method">
+                <div class="contact-icon">📞</div>
+                <a href="tel:+2348106963533" class="contact-link">+234 810 696 3533</a>
+            </div>
+            <div class="contact-method">
+                <div class="contact-icon">💬</div>
+                <a href="https://wa.me/2348106963533" class="contact-link">WhatsApp: +234 810 696 3533</a>
+            </div>
+        </div>
+        <a href="https://yourshoplink.com" class="shop-button" id="shop">Visit Our Shop</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2023 DJ Ice-Mix. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Preloader
+        window.addEventListener('load', function() {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 500);
+            }, 1500);
+        });
+
+        // Mobile Menu Toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Scroll animations
+        const animateOnScroll = () => {
+            const serviceCards = document.querySelectorAll('.service-card');
+            const clientCards = document.querySelectorAll('.client-card');
+            const locationContent = document.querySelector('.location-content');
+            const contactMethods = document.querySelectorAll('.contact-method');
+            
+            // Service cards animation
+            serviceCards.forEach((card, index) => {
+                const cardPosition = card.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (cardPosition < screenPosition) {
+                    setTimeout(() => {
+                        card.classList.add('show');
+                    }, index * 100);
+                }
+            });
+            
+            // Client cards animation
+            clientCards.forEach((card, index) => {
+                const cardPosition = card.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (cardPosition < screenPosition) {
+                    setTimeout(() => {
+                        card.classList.add('show');
+                    }, index * 100);
+                }
+            });
+            
+            // Location content animation
+            const locationPosition = locationContent.getBoundingClientRect().top;
+            const locationScreenPosition = window.innerHeight / 1.3;
+            
+            if (locationPosition < locationScreenPosition) {
+                locationContent.classList.add('show');
+            }
+            
+            // Contact methods animation
+            contactMethods.forEach((method, index) => {
+                const methodPosition = method.getBoundingClientRect().top;
+                const methodScreenPosition = window.innerHeight / 1.3;
+                
+                if (methodPosition < methodScreenPosition) {
+                    setTimeout(() => {
+                        method.classList.add('show');
+                    }, index * 100);
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateOnScroll);
+        // Trigger once on load in case elements are already visible
+        animateOnScroll();
+
+        // Particle.js Background
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simple particle-like animation for the hero section
+            const canvas = document.createElement('canvas');
+            canvas.id = 'particles-js';
+            document.getElementById('hero').appendChild(canvas);
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Resize handler
+            window.addEventListener('resize', function() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            });
+            
+            // Particle class
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 3 + 1;
+                    this.speedX = Math.random() * 1 - 0.5;
+                    this.speedY = Math.random() * 1 - 0.5;
+                    this.color = `hsl(${Math.random() * 60 + 180}, 100%, 50%)`;
+                }
+                
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    
+                    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+                }
+                
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Glow effect
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = this.color;
+                }
+            }
+            
+            // Create particles
+            const particles = [];
+            for (let i = 0; i < 50; i++) {
+                particles.push(new Particle());
+            }
+            
+            // Animation loop
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Connect particles
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            ctx.strokeStyle = `rgba(0, 240, 255, ${1 - distance/100})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                    
+                    particles[i].update();
+                    particles[i].draw();
+                }
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+        });
+
+        // Glow effect for buttons on hover
+        document.querySelectorAll('.cta-button, .shop-button, .service-card, .client-card').forEach(element => {
+            element.addEventListener('mouseenter', function() {
+                this.style.boxShadow = `0 0 20px ${this.classList.contains('shop-button') ? 'rgba(255, 0, 240, 0.7)' : 'rgba(0, 240, 255, 0.7)'}`;
+            });
+            
+            element.addEventListener('mouseleave', function() {
+                this.style.boxShadow = '';
+            });
+        });
+    </script>
+</body>
+</html>
